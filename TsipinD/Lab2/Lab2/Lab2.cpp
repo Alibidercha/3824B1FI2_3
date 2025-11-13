@@ -6,7 +6,6 @@
 
 int main()
 {
-    TVector<int> v(4);
     std::cout << "Hello World!\n";
 }
 
