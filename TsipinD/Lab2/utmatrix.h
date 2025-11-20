@@ -3,6 +3,7 @@
 #include <iostream>
 #include <stdexcept>
 
+
 const int MAX_VECTOR_SIZE = 100000000;
 const int MAX_MATRIX_SIZE = 10000;
 
@@ -14,6 +15,12 @@ protected:
   int Size;       // размер вектора
   int StartIndex; // индекс первого элемента вектора
   ValType* pVector;
+
+  void swap(TVector& v) {
+      std::swap(Size, v.Size);
+      std::swap(StartIndex, v.StartIndex);
+      std::swap(pVector, v.pVector);
+  }
 public:
   TVector(int s = 10, int si = 0);
   TVector(const TVector &v);                // конструктор копирования
@@ -84,6 +91,7 @@ TVector<ValType>::TVector(const TVector& v) : Size(v.Size), StartIndex(v.StartIn
 template <class ValType>
 TVector<ValType>::~TVector() {
     delete[] pVector;
+    pVector = nullptr;
 }
 
 template <class ValType>
@@ -109,13 +117,8 @@ bool TVector<ValType>::operator!=(const TVector& v) const {
 template <class ValType>
 TVector<ValType>& TVector<ValType>::operator=(const TVector& v) {
     if (this == &v) return *this;
-    if (Size != v.Size) {
-        delete[] pVector;
-        Size = v.Size;
-        pVector = (Size > 0) ? new ValType[Size] : nullptr;
-    }
-    StartIndex = v.StartIndex;
-    for (int i = 0; i < Size; i++) pVector[i] = v.pVector[i];
+    TVector temp(v);
+    swap(temp);
     return *this;
 }
 
@@ -215,18 +218,12 @@ TMatrix<ValType>& TMatrix<ValType>::operator=(const TMatrix& mt) {
 
 template <class ValType>
 TMatrix<ValType> TMatrix<ValType>::operator+(const TMatrix& mt) {
-    if (this->Size != mt.Size) throw std::invalid_argument("Sizes and the start indexes do not match");
-    TMatrix<ValType> res(this->Size);
-    for (int i = 0; i < this->Size; i++) res.pVector[i] = this->pVector[i] + mt.pVector[i];
-    return res;
+    return TMatrix<ValType>(TVector<TVector<ValType>>::operator+(mt));
 }
 
 template <class ValType>
 TMatrix<ValType> TMatrix<ValType>::operator-(const TMatrix& mt) {
-    if (this->Size != mt.Size) throw std::invalid_argument("Sizes and the start indexes do not match");
-    TMatrix<ValType> res(this->Size);
-    for (int i = 0; i < this->Size; i++) res.pVector[i] = this->pVector[i] - mt.pVector[i];
-    return res;
+    return TMatrix<ValType>(TVector<TVector<ValType>>::operator-(mt));
 }
 
 template <class VT>

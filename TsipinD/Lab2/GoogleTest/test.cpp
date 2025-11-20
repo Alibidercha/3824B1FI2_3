@@ -114,17 +114,6 @@ TEST(TVector, multiply_vectors) {
     EXPECT_THROW(vec1 * vec2, std::invalid_argument);
 }
 
-TEST(TVector, output_operator) {
-    TVector<int> v(3);
-    v[0] = 10;
-    v[1] = 20;
-    v[2] = 30;
-
-    std::cout << v << std::endl;
-    std::cout << " = " << std::endl;
-    std::cout << "10 20 30" << std::endl;
-}
-
 // =============== TMatrix Tests =========================
 
 TEST(TMatrix, matrix_length_and_creation) {
@@ -185,16 +174,4 @@ TEST(TMatrix, index_test) {
 
     EXPECT_THROW(m[-1], std::out_of_range);
     EXPECT_THROW(m[3], std::out_of_range);
-}
-
-TEST(TMatrix, output_operator) {
-    TMatrix<int> m(2);
-    m[0][0] = 1;
-    m[0][1] = 2;
-    m[1][1] = 3;
-
-    std::cout << m << std::endl;
-    std::cout << " = " << std::endl;
-    std::cout << "1 2" << std::endl;
-    std::cout << "0 3" << std::endl;
 }
